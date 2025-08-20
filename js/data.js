@@ -69,6 +69,16 @@ const recommendations = {
     14: [28], // Veg Thali -> Soft Drink
     26: [28], // Chicken Biryani -> Soft Drink
     33: [18], // Chicken Lollipop -> Veg Fried Rice
+    42: [1], // Puri Bhaji -> Tea
+    11: [2], // Upma -> Coffee
+    3: [4],  // Medu Vada -> Idli Sambar
+    13: [31], // Dal Rice -> Extra Pav
+    18: [20], // Veg Fried Rice -> Veg Manchurian
+    19: [21], // Veg Noodles -> Veg Momos
+    41: [33], // Chicken Fried Rice -> Chicken Lollipop
+    36: [31], // Single Omelet -> Extra Pav
+    6: [1],   // Poha -> Tea
+    27: [29], // Special Thali -> Tropicana
 };
 
 const bestSeller = { id: 14, name: 'Veg Thali', price: 85, image: 'images/veg-thali.jpg', description: 'Our most popular complete meal.' };
