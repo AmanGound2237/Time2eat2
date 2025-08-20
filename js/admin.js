@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- DOM Elements ---
     const ordersTableBody = document.querySelector('#orders-table tbody');
     const menuItemsContainer = document.getElementById('menu-items-container');
     const newOrderForm = document.getElementById('new-order-form');
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-id');
 
     // --- 1. Populate the "Order Now" form with menu items ---
     if (menu && menuItemsContainer) {
@@ -26,10 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 2. Function to render the orders table ---
-    function renderOrdersTable() {
+    function renderOrdersTable(ordersToRender = orders) {
+        // Sort the array by delivery time before rendering
+        const sortedOrders = [...ordersToRender].sort((a, b) => new Date(a.deliveryTime) - new Date(b.deliveryTime));
+
         ordersTableBody.innerHTML = ''; // Clear existing table rows
-        if (orders && ordersTableBody) {
-            orders.forEach(order => {
+        if (sortedOrders && ordersTableBody) {
+            sortedOrders.forEach(order => {
                 const row = document.createElement('tr');
                 const itemsFormatted = order.items.map(item => item.name).join(', ');
                 row.innerHTML = `
@@ -50,11 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
 
             const customerNameInput = document.getElementById('customer-name');
-            const customerName = customerNameInput.value;
+            const deliveryTimeInput = document.getElementById('delivery-time');
             const selectedCheckboxes = document.querySelectorAll('input[name="menu-items"]:checked');
 
-            if (!customerName || selectedCheckboxes.length === 0) {
-                alert('Please enter a customer name and select at least one item.');
+            if (!customerNameInput.value || !deliveryTimeInput.value || selectedCheckboxes.length === 0) {
+                alert('Please fill out all fields and select at least one item.');
                 return;
             }
 
@@ -66,22 +72,41 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalPrice = selectedItems.reduce((sum, item) => sum + item.price, 0);
 
             const newOrder = {
-                orderId: `ORD${Date.now()}`, // Simple unique ID
-                customerName: customerName,
+                orderId: `ORD${Date.now()}`,
+                customerName: customerNameInput.value,
                 items: selectedItems,
-                deliveryTime: new Date(),
+                deliveryTime: new Date(deliveryTimeInput.value),
                 totalPrice: totalPrice,
             };
 
-            orders.push(newOrder); // Add to the main orders array
-            renderOrdersTable(); // Re-render the table with the new order
+            orders.push(newOrder);
+            renderOrdersTable(); // Re-render the full, sorted table
 
             // Clear the form
-            customerNameInput.value = '';
-            selectedCheckboxes.forEach(cb => cb.checked = false);
+            newOrderForm.reset();
         });
     }
 
-    // --- 4. Initial render of the orders table on page load ---
+    // --- 4. Handle Search ---
+    if (searchForm) {
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            if (searchTerm) {
+                const filteredOrders = orders.filter(order =>
+                    order.orderId.toLowerCase().includes(searchTerm)
+                );
+                renderOrdersTable(filteredOrders);
+            } else {
+                renderOrdersTable(); // If search is empty, show all
+            }
+        });
+
+        searchForm.addEventListener('reset', () => {
+            renderOrdersTable(); // On reset, render the full table
+        });
+    }
+
+    // --- 5. Initial render of the orders table on page load ---
     renderOrdersTable();
 });

@@ -19,6 +19,10 @@
                     <label for="customer-name">Customer Name</label>
                     <input type="text" id="customer-name" name="customer-name" required>
                 </div>
+                <div class="input-group">
+                    <label for="delivery-time">Delivery Time</label>
+                    <input type="datetime-local" id="delivery-time" name="delivery-time" required>
+                </div>
                 <fieldset>
                     <legend>Menu Items</legend>
                     <div id="menu-items-container">
@@ -31,6 +35,14 @@
 
         <section id="orders">
             <h2>Current Orders</h2>
+            <form id="search-form">
+                <div class="input-group">
+                    <label for="search-id">Search by Order ID</label>
+                    <input type="search" id="search-id" name="search-id" placeholder="Enter Order ID...">
+                    <button type="submit">Search</button>
+                    <button type="reset" id="reset-search-btn">Reset</button>
+                </div>
+            </form>
             <div class="table-container">
                 <table id="orders-table">
                     <thead>
