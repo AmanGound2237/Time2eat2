@@ -1,0 +1,88 @@
+{
+  "menu": {
+    "beverages": [
+      { "id": 1, "name": "Tea", "price": 10, "image": "images/tea.jpg", "description": "A warm cup of tea.", "status": "available" },
+      { "id": 2, "name": "Coffee", "price": 20, "image": "images/coffee.jpg", "description": "A fresh cup of coffee.", "status": "available" },
+      { "id": 28, "name": "Soft Drink", "price": 10, "image": "images/soft-drink.jpg", "description": "A refreshing soft drink.", "status": "available" },
+      { "id": 29, "name": "Tropicana", "price": 20, "image": "images/tropicana.jpg", "description": "A carton of Tropicana juice.", "status": "available" },
+      { "id": 30, "name": "Cold Coffee", "price": 50, "image": "images/cold-coffee.jpg", "description": "A chilled cold coffee.", "status": "sold-out" },
+      { "id": 40, "name": "Mineral Water", "price": 10, "image": "images/water.jpg", "description": "A bottle of mineral water.", "status": "available" }
+    ],
+    "breakfast_and_snacks": [
+      { "id": 3, "name": "Medu Vada", "price": 40, "image": "images/medu-vada.jpg", "description": "Crispy and savory medu vada.", "status": "available" },
+      { "id": 4, "name": "Idli Sambar", "price": 40, "image": "images/idli-sambar.jpg", "description": "Soft idlis with hot sambar.", "status": "available" },
+      { "id": 5, "name": "Vada Pav", "price": 15, "image": "images/vada-pav.jpg", "description": "The classic Mumbai street food.", "status": "available" },
+      { "id": 6, "name": "Poha", "price": 40, "image": "images/poha.jpg", "description": "A light and healthy breakfast.", "status": "available" },
+      { "id": 7, "name": "Misal Pav", "price": 60, "image": "images/misal-pav.jpg", "description": "Spicy and delicious misal with pav.", "status": "available" },
+      { "id": 8, "name": "Samosa Pav", "price": 20, "image": "images/samosa-pav.jpg", "description": "A samosa stuffed in a pav.", "status": "available" },
+      { "id": 9, "name": "Sada Dosa", "price": 50, "image": "images/sada-dosa.jpg", "description": "A plain, crispy dosa.", "status": "available" },
+      { "id": 10, "name": "Masala Dosa", "price": 60, "image": "images/masala-dosa.jpg", "description": "Dosa with a spicy potato filling.", "status": "available" },
+      { "id": 11, "name": "Upma", "price": 35, "image": "images/upma.jpg", "description": "A savory semolina dish.", "status": "available" },
+      { "id": 12, "name": "Shreera", "price": 40, "image": "images/shreera.jpg", "description": "A sweet semolina dish.", "status": "available" },
+      { "id": 34, "name": "Bread Pakoda", "price": 25, "image": "images/bread-pakoda.jpg", "description": "Fried bread fritters.", "status": "available" },
+      { "id": 42, "name": "Puri Bhaji", "price": 50, "image": "images/puri-bhaji.jpg", "description": "Puffed bread with potato curry.", "status": "available" },
+      { "id": 43, "name": "Single Batata Vada", "price": 12, "image": "images/batata-vada.jpg", "description": "A single potato fritter.", "status": "available" }
+    ],
+    "meals_and_thalis": [
+      { "id": 13, "name": "Dal Rice", "price": 60, "image": "images/dal-rice.jpg", "description": "A simple and hearty meal.", "status": "available" },
+      { "id": 14, "name": "Veg Thali", "price": 85, "image": "images/veg-thali.jpg", "description": "A complete vegetarian thali.", "status": "available" },
+      { "id": 15, "name": "Tomato Rice", "price": 60, "image": "images/tomato-rice.jpg", "description": "Flavorful rice with tomatoes.", "status": "available" },
+      { "id": 16, "name": "Mushroom Rice", "price": 70, "image": "images/mushroom-rice.jpg", "description": "Rice cooked with mushrooms.", "status": "available" },
+      { "id": 17, "name": "Bhaji Chapati", "price": 50, "image": "images/bhaji-chapati.jpg", "description": "Vegetable curry with flatbread.", "status": "available" },
+      { "id": 27, "name": "Special Thali", "price": 140, "image": "images/special-thali.jpg", "description": "A special, elaborate thali.", "status": "available" }
+    ],
+    "rice_and_noodles": [
+      { "id": 18, "name": "Veg Fried Rice", "price": 75, "image": "images/veg-fried-rice.jpg", "description": "Classic fried rice with vegetables.", "status": "available" },
+      { "id": 19, "name": "Veg Noodles", "price": 75, "image": "images/veg-noodles.jpg", "description": "Stir-fried noodles with vegetables.", "status": "available" },
+      { "id": 32, "name": "Egg Fried Rice", "price": 75, "image": "images/egg-fried-rice.jpg", "description": "Fried rice with egg.", "status": "available" },
+      { "id": 41, "name": "Chicken Fried Rice", "price": 100, "image": "images/chicken-fried-rice.jpg", "description": "Fried rice with chicken.", "status": "available" }
+    ],
+    "indo_chinese_and_rolls": [
+      { "id": 20, "name": "Veg Manchurian", "price": 75, "image": "images/veg-manchurian.jpg", "description": "Vegetable balls in a tangy sauce.", "status": "available" },
+      { "id": 21, "name": "Veg Momos", "price": 60, "image": "images/veg-momos.jpg", "description": "Steamed vegetable dumplings.", "status": "available" },
+      { "id": 22, "name": "Paneer Momos", "price": 60, "image": "images/paneer-momos.jpg", "description": "Steamed paneer dumplings.", "status": "available" },
+      { "id": 23, "name": "Chicken Momos", "price": 70, "image": "images/chicken-momos.jpg", "description": "Steamed chicken dumplings.", "status": "available" },
+      { "id": 35, "name": "Veg Manchurian Roll", "price": 30, "image": "images/veg-manchurian-roll.jpg", "description": "A delicious manchurian roll.", "status": "available" }
+    ],
+    "parathas_and_biryani": [
+      { "id": 24, "name": "Egg Roast Paratha", "price": 75, "image": "images/egg-roast-paratha.jpg", "description": "Paratha with an egg roast filling.", "status": "available" },
+      { "id": 25, "name": "Chicken Masala Paratha", "price": 100, "image": "images/chicken-masala-paratha.jpg", "description": "Paratha with chicken masala filling.", "status": "available" },
+      { "id": 26, "name": "Chicken Biryani", "price": 100, "image": "images/chicken-biryani.jpg", "description": "Aromatic chicken biryani.", "status": "available" }
+    ],
+    "eggs_and_omelets": [
+      { "id": 36, "name": "Single Omelet", "price": 30, "image": "images/single-omelet.jpg", "description": "A simple single egg omelet.", "status": "available" },
+      { "id": 37, "name": "Double Omelet", "price": 50, "image": "images/double-omelet.jpg", "description": "A hearty double egg omelet.", "status": "available" },
+      { "id": 38, "name": "Single Bhurji", "price": 40, "image": "images/single-bhurji.jpg", "description": "Scrambled eggs with spices.", "status": "available" },
+      { "id": 39, "name": "Double Bhurji", "price": 60, "image": "images/double-bhurji.jpg", "description": "A larger portion of scrambled eggs.", "status": "available" }
+    ],
+    "non_veg_snacks": [
+      { "id": 33, "name": "Chicken Lollipop", "price": 30, "image": "images/chicken-lollipop.jpg", "description": "Spicy and succulent chicken lollipops.", "status": "available" }
+    ],
+    "extras": [
+      { "id": 31, "name": "Extra Pav", "price": 5, "image": "images/pav.jpg", "description": "A single piece of pav bread.", "status": "available" }
+    ]
+  },
+  "recommendations": {
+    "5": [1],
+    "8": [2],
+    "10": [2],
+    "14": [28],
+    "26": [28],
+    "33": [18],
+    "42": [1],
+    "11": [2],
+    "3": [4],
+    "13": [31],
+    "18": [20],
+    "19": [21],
+    "41": [33],
+    "36": [31],
+    "6": [1],
+    "27": [29]
+  },
+  "orders": [
+    { "orderId": "ORD126", "customerName": "Rohan Sharma", "itemIds": [10, 2], "deliveryTime": "2024-08-20T09:30:00.000Z", "totalPrice": 80, "status": "pending" },
+    { "orderId": "ORD127", "customerName": "Priya Verma", "itemIds": [14, 29], "deliveryTime": "2024-08-20T13:00:00.000Z", "totalPrice": 105, "status": "pending" },
+    { "orderId": "ORD128", "customerName": "Amit Patel", "itemIds": [41, 33], "deliveryTime": "2024-08-20T20:15:00.000Z", "totalPrice": 130, "status": "pending" }
+  ]
+}

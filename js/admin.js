@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- State ---
+    let menu = {};
+    let orders = [];
+
     // --- DOM Elements ---
     const pendingOrdersTableBody = document.querySelector('#pending-orders-table tbody');
     const doneOrdersTableBody = document.querySelector('#done-orders-table tbody');
@@ -6,26 +10,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const newOrderForm = document.getElementById('new-order-form');
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-id');
-
-    // Menu Management Elements
     const addItemForm = document.getElementById('add-item-form');
     const editItemForm = document.getElementById('edit-item-form');
     const editItemSelect = document.getElementById('select-item-edit');
 
-    // --- RENDER FUNCTIONS ---
+    // --- API URL ---
+    const API_URL = 'http://localhost:3000/api';
 
+    // --- RENDER FUNCTIONS ---
     function renderOrders(ordersToRender = orders) {
         const pendingOrders = ordersToRender.filter(o => o.status === 'pending');
         const doneOrders = ordersToRender.filter(o => o.status === 'done');
-
-        // Sort pending orders by time
         pendingOrders.sort((a, b) => new Date(a.deliveryTime) - new Date(b.deliveryTime));
 
-        // Render Pending Orders
         pendingOrdersTableBody.innerHTML = '';
         pendingOrders.forEach(order => {
+            const allItems = [].concat(...Object.values(menu));
+            const orderItems = order.itemIds.map(id => allItems.find(item => item.id === id));
+            const itemsFormatted = orderItems.map(item => item ? item.name : 'Unknown Item').join(', ');
+
             const row = document.createElement('tr');
-            const itemsFormatted = order.items.map(item => item.name).join(', ');
             row.innerHTML = `
                 <td data-label="Order ID">${order.orderId}</td>
                 <td data-label="Customer Name">${order.customerName}</td>
@@ -40,11 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
             pendingOrdersTableBody.appendChild(row);
         });
 
-        // Render Done Orders
         doneOrdersTableBody.innerHTML = '';
         doneOrders.forEach(order => {
+            const allItems = [].concat(...Object.values(menu));
+            const orderItems = order.itemIds.map(id => allItems.find(item => item.id === id));
+            const itemsFormatted = orderItems.map(item => item ? item.name : 'Unknown Item').join(', ');
+
             const row = document.createElement('tr');
-            const itemsFormatted = order.items.map(item => item.name).join(', ');
             row.innerHTML = `
                 <td data-label="Order ID">${order.orderId}</td>
                 <td data-label="Customer Name">${order.customerName}</td>
@@ -56,6 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function populatePlaceOrderForm() { /* ... same ... */ }
+    function populateEditItemDropdown() { /* ... same ... */ }
+    function refreshAdminMenuDisplays() {
+        populatePlaceOrderForm();
+        populateEditItemDropdown();
+    }
+    // Re-pasting helpers
     function populatePlaceOrderForm() {
         menuItemsContainer.innerHTML = '';
         for (const category in menu) {
@@ -65,11 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 checkbox.id = `order-item-${item.id}`;
                 checkbox.name = 'menu-items';
                 checkbox.value = item.id;
-
                 const label = document.createElement('label');
                 label.htmlFor = `order-item-${item.id}`;
                 label.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-
                 const container = document.createElement('div');
                 container.appendChild(checkbox);
                 container.appendChild(label);
@@ -77,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
-
     function populateEditItemDropdown() {
         editItemSelect.innerHTML = '<option value="">-- Choose an item --</option>';
         for (const category in menu) {
@@ -90,32 +100,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function refreshAdminMenuDisplays() {
-        populatePlaceOrderForm();
-        populateEditItemDropdown();
-    }
-
     // --- EVENT HANDLERS ---
 
     // Handle order actions (Mark as Done, Cancel)
-    pendingOrdersTableBody.addEventListener('click', (e) => {
+    pendingOrdersTableBody.addEventListener('click', async (e) => {
         const orderId = e.target.dataset.id;
         if (!orderId) return;
 
-        const order = orders.find(o => o.orderId === orderId);
-        if (!order) return;
+        let newStatus = '';
+        if (e.target.classList.contains('mark-done-btn')) newStatus = 'done';
+        if (e.target.classList.contains('cancel-order-btn')) newStatus = 'cancelled';
+        if (!newStatus) return;
 
-        if (e.target.classList.contains('mark-done-btn')) {
-            order.status = 'done';
-        } else if (e.target.classList.contains('cancel-order-btn')) {
-            order.status = 'cancelled'; // This will make it disappear from both lists
+        try {
+            await fetch(`${API_URL}/orders/${orderId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus }),
+            });
+            await init(); // Re-fetch all data and re-render
+        } catch (error) {
+            console.error('Failed to update order status:', error);
         }
-
-        renderOrders(); // Re-render all tables
     });
 
     // Handle "Add New Item"
-    addItemForm.addEventListener('submit', (e) => {
+    addItemForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('new-item-name').value;
         const price = parseFloat(document.getElementById('new-item-price').value);
@@ -123,60 +133,50 @@ document.addEventListener('DOMContentLoaded', () => {
         const description = document.getElementById('new-item-desc').value;
 
         const newItem = {
-            id: Date.now(),
-            name,
-            price,
-            description,
+            id: Date.now(), name, price, description, category,
             image: `images/${name.toLowerCase().replace(/ /g, '-')}.jpg`,
             status: 'available'
         };
 
-        if (!menu[category]) {
-            menu[category] = [];
+        try {
+            await fetch(`${API_URL}/menu`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newItem),
+            });
+            await init(); // Re-fetch all data and re-render
+            addItemForm.reset();
+        } catch (error) {
+            console.error('Failed to add new item:', error);
         }
-        menu[category].push(newItem);
-
-        console.log(`'${name}' added successfully!`);
-        refreshAdminMenuDisplays();
-        addItemForm.reset();
     });
 
     // Handle "Edit Existing Item"
-    editItemForm.addEventListener('submit', (e) => {
+    editItemForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const itemId = parseInt(editItemSelect.value);
         const newPrice = document.getElementById('edit-item-price').value;
         const newStatus = document.getElementById('edit-item-status').value;
+        if (!itemId) return;
 
-        if (!itemId) {
-            console.error('Please select an item to edit.');
-            return;
-        }
+        const updates = { status: newStatus };
+        if (newPrice) updates.price = parseFloat(newPrice);
 
-        let itemFound = false;
-        for (const category in menu) {
-            const item = menu[category].find(i => i.id === itemId);
-            if (item) {
-                if (newPrice) {
-                    item.price = parseFloat(newPrice);
-                }
-                item.status = newStatus;
-                itemFound = true;
-                break;
-            }
-        }
-
-        if (itemFound) {
-            console.log('Item updated successfully!');
-            refreshAdminMenuDisplays();
+        try {
+            await fetch(`${API_URL}/menu/${itemId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updates),
+            });
+            await init(); // Re-fetch all data and re-render
             editItemForm.reset();
-        } else {
-            console.error('Error: Item not found.');
+        } catch (error) {
+            console.error('Failed to edit item:', error);
         }
     });
 
     // Handle "Place a New Order"
-    newOrderForm.addEventListener('submit', (e) => {
+    newOrderForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const customerName = document.getElementById('customer-name').value;
         const deliveryTime = document.getElementById('delivery-time').value;
@@ -192,17 +192,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalPrice = selectedItems.reduce((sum, item) => sum + item.price, 0);
 
         const newOrder = {
-            orderId: `ORD${Date.now()}`,
             customerName,
-            items: selectedItems,
+            itemIds: selectedItems.map(i => i.id),
             deliveryTime: new Date(deliveryTime),
             totalPrice,
-            status: 'pending', // New orders are pending by default
+            // status is added server-side
         };
 
-        orders.push(newOrder);
-        renderOrders();
-        newOrderForm.reset();
+        try {
+            await fetch(`${API_URL}/orders`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newOrder),
+            });
+            await init(); // Re-fetch all data and re-render
+            newOrderForm.reset();
+        } catch (error) {
+            console.error('Failed to place new order:', error);
+        }
     });
 
     // Handle Search
@@ -210,20 +217,30 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const searchTerm = searchInput.value.trim().toLowerCase();
         if (searchTerm) {
-            const filteredOrders = orders.filter(order =>
-                order.orderId.toLowerCase().includes(searchTerm)
-            );
+            const filteredOrders = orders.filter(order => order.orderId.toLowerCase().includes(searchTerm));
             renderOrders(filteredOrders);
         } else {
             renderOrders();
         }
     });
+    searchForm.addEventListener('reset', () => renderOrders());
 
-    searchForm.addEventListener('reset', () => {
-        renderOrders();
-    });
+    // --- ASYNC INITIALIZATION ---
+    async function init() {
+        try {
+            const [menuRes, ordersRes] = await Promise.all([
+                fetch(`${API_URL}/menu`),
+                fetch(`${API_URL}/orders`)
+            ]);
+            menu = await menuRes.json();
+            orders = await ordersRes.json();
+            renderOrders();
+            refreshAdminMenuDisplays();
+        } catch (error) {
+            console.error("Failed to initialize admin panel:", error);
+            alert("Could not connect to the server. Please make sure the backend server is running.");
+        }
+    }
 
-    // --- INITIALIZATION ---
-    renderOrders();
-    refreshAdminMenuDisplays();
+    init();
 });
