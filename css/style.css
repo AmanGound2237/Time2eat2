@@ -175,3 +175,21 @@ section {
 #orders-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+
+#new-order-form fieldset {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+#menu-items-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    padding: 0.5rem;
+}
+
+#menu-items-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
