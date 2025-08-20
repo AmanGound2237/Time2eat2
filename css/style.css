@@ -84,6 +84,83 @@ h1 {
     background-color: #c82333;
 }
 
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    body {
+        word-wrap: break-word;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: center; /* Center header content */
+    }
+
+    header nav {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .item-card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .item-card {
+        width: 90%;
+        max-width: 400px; /* Max width for larger mobile */
+    }
+
+    .modal-content {
+        width: 90%;
+        margin: 15% auto;
+    }
+
+    #new-order-form {
+        width: 90%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    /* Responsive Table: Transform to card layout */
+    .table-container {
+        width: 100%;
+    }
+    #orders-table {
+        border: none;
+    }
+    #orders-table thead {
+        display: none; /* Hide table headers */
+    }
+    #orders-table, #orders-table tbody, #orders-table tr, #orders-table td {
+        display: block;
+        width: 100%;
+    }
+    #orders-table tr {
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    #orders-table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+        border: none;
+        border-bottom: 1px solid #eee;
+    }
+    #orders-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 0.5rem;
+        font-weight: bold;
+        text-align: left;
+    }
+}
+
 .input-group input,
 .input-group select {
     width: 100%;

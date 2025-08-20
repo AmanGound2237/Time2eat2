@@ -33,11 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const row = document.createElement('tr');
                 const itemsFormatted = order.items.map(item => item.name).join(', ');
                 row.innerHTML = `
-                    <td>${order.orderId}</td>
-                    <td>${order.customerName}</td>
-                    <td>${itemsFormatted}</td>
-                    <td>${new Date(order.deliveryTime).toLocaleString()}</td>
-                    <td>$${order.totalPrice.toFixed(2)}</td>
+                    <td data-label="Order ID">${order.orderId}</td>
+                    <td data-label="Customer Name">${order.customerName}</td>
+                    <td data-label="Items Ordered">${itemsFormatted}</td>
+                    <td data-label="Delivery Time">${new Date(order.deliveryTime).toLocaleString()}</td>
+                    <td data-label="Total Price">$${order.totalPrice.toFixed(2)}</td>
                 `;
                 ordersTableBody.appendChild(row);
             });
