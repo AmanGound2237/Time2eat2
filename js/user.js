@@ -47,8 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function createItemCard(item) {
         const card = document.createElement('div');
         card.classList.add('item-card');
+        if (item.status === 'sold-out') {
+            card.classList.add('sold-out');
+        }
         card.dataset.itemId = item.id;
-        card.dataset.testid = `item-card-${item.id}`; // Add test ID
+        card.dataset.testid = `item-card-${item.id}`;
 
         card.innerHTML = `
             <div class="item-card-image-container" style="cursor: pointer;">
@@ -57,13 +60,18 @@ document.addEventListener('DOMContentLoaded', () => {
             <h4>${item.name}</h4>
             <p>$${item.price.toFixed(2)}</p>
             <p>${item.description}</p>
-            <button class="add-to-cart-btn" data-testid="add-to-cart-btn-${item.id}">Add to Cart</button>
+            <button class="add-to-cart-btn" data-testid="add-to-cart-btn-${item.id}" ${item.status === 'sold-out' ? 'disabled' : ''}>
+                ${item.status === 'sold-out' ? 'Sold Out' : 'Add to Cart'}
+            </button>
         `;
 
-        card.querySelector('.add-to-cart-btn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            addToCart(item);
-        });
+        const addToCartBtn = card.querySelector('.add-to-cart-btn');
+        if (item.status !== 'sold-out') {
+            addToCartBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addToCart(item);
+            });
+        }
 
         card.querySelector('.item-card-image-container').addEventListener('click', () => openRecModal(item));
 

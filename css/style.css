@@ -173,6 +173,49 @@ h1 {
     flex-grow: 1;
 }
 
+/* Menu Management */
+#menu-management {
+    margin-bottom: 2rem;
+}
+
+.menu-management-forms {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.menu-management-forms form {
+    flex: 1;
+    min-width: 300px;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* Sold Out Item Style */
+.item-card.sold-out {
+    opacity: 0.6;
+    background-color: #f8f9fa;
+}
+
+.item-card.sold-out .add-to-cart-btn {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Order Management Tables */
+.order-tables-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.order-tables-container > div {
+    flex: 1;
+    min-width: 400px;
+}
+
 .input-group input,
 .input-group select {
     width: 100%;

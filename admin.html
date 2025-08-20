@@ -12,6 +12,60 @@
     </header>
 
     <main>
+        <section id="menu-management">
+            <h2>Menu Management</h2>
+
+            <div class="menu-management-forms">
+                <!-- Add New Item Form -->
+                <form id="add-item-form">
+                    <h3>Add New Item</h3>
+                    <div class="input-group">
+                        <label for="new-item-name">Item Name</label>
+                        <input type="text" id="new-item-name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="new-item-price">Price</label>
+                        <input type="number" id="new-item-price" step="0.01" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="new-item-category">Category</label>
+                        <input type="text" id="new-item-category" placeholder="e.g., beverages" required>
+                    </div>
+                     <div class="input-group">
+                        <label for="new-item-desc">Description</label>
+                        <textarea id="new-item-desc" rows="2"></textarea>
+                    </div>
+                    <button type="submit">Add Item</button>
+                </form>
+
+                <!-- Edit Existing Item Form -->
+                <form id="edit-item-form">
+                    <h3>Edit Existing Item</h3>
+                    <div class="input-group">
+                        <label for="select-item-edit">Select Item</label>
+                        <select id="select-item-edit" required>
+                            <option value="">-- Choose an item --</option>
+                            <!-- Options will be populated by JS -->
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-item-price">New Price</label>
+                        <input type="number" id="edit-item-price" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-item-status">Status</label>
+                        <select id="edit-item-status">
+                            <option value="available">Available</option>
+                            <option value="sold-out">Sold Out</option>
+                        </select>
+                    </div>
+                    <button type="submit">Update Item</button>
+                </form>
+            </div>
+        </section>
+
+        <hr>
+
         <section id="order-now">
             <h2>Place a New Order</h2>
             <form id="new-order-form">
@@ -33,8 +87,10 @@
             </form>
         </section>
 
+        <hr>
+
         <section id="orders">
-            <h2>Current Orders</h2>
+            <h2>Order Management</h2>
             <form id="search-form">
                 <div class="input-group">
                     <label for="search-id">Search by Order ID</label>
@@ -43,21 +99,49 @@
                     <button type="reset" id="reset-search-btn">Reset</button>
                 </div>
             </form>
-            <div class="table-container">
-                <table id="orders-table">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                        <th>Customer Name</th>
-                        <th>Items Ordered</th>
-                        <th>Delivery Time</th>
-                        <th>Total Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Orders will be injected here by JS -->
-                </tbody>
-            </table>
+
+            <div class="order-tables-container">
+                <div id="pending-orders">
+                    <h3>Pending Orders</h3>
+                    <div class="table-container">
+                        <table id="pending-orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Items Ordered</th>
+                                    <th>Delivery Time</th>
+                                    <th>Total Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Pending orders will be injected here by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="done-orders">
+                    <h3>Completed Orders</h3>
+                    <div class="table-container">
+                        <table id="done-orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Items Ordered</th>
+                                    <th>Delivery Time</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Completed orders will be injected here by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 

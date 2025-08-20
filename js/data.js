@@ -4,7 +4,7 @@ const menu = {
         { id: 2, name: 'Coffee', price: 20, image: 'images/coffee.jpg', description: 'A fresh cup of coffee.' },
         { id: 28, name: 'Soft Drink', price: 10, image: 'images/soft-drink.jpg', description: 'A refreshing soft drink.' },
         { id: 29, name: 'Tropicana', price: 20, image: 'images/tropicana.jpg', description: 'A carton of Tropicana juice.' },
-        { id: 30, name: 'Cold Coffee', price: 50, image: 'images/cold-coffee.jpg', description: 'A chilled cold coffee.' },
+        { id: 30, name: 'Cold Coffee', price: 50, image: 'images/cold-coffee.jpg', description: 'A chilled cold coffee.', status: 'sold-out' },
         { id: 40, name: 'Mineral Water', price: 10, image: 'images/water.jpg', description: 'A bottle of mineral water.' },
     ],
     "breakfast_and_snacks": [
@@ -90,6 +90,7 @@ const orders = [
         items: [menu.breakfast_and_snacks[7], menu.beverages[1]], // Masala Dosa, Coffee
         deliveryTime: '2024-08-20 09:30',
         totalPrice: 80,
+        status: 'pending',
     },
     {
         orderId: 'ORD127',
@@ -97,6 +98,7 @@ const orders = [
         items: [menu.meals_and_thalis[1], menu.beverages[3]], // Veg Thali, Tropicana
         deliveryTime: '2024-08-20 13:00',
         totalPrice: 105,
+        status: 'pending',
     },
     {
         orderId: 'ORD128',
@@ -104,5 +106,6 @@ const orders = [
         items: [menu.rice_and_noodles[3], menu.non_veg_snacks[0]], // Chicken Fried Rice, Chicken Lollipop
         deliveryTime: '2024-08-20 20:15',
         totalPrice: 130,
+        status: 'pending',
     }
 ];
