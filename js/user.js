@@ -2,32 +2,76 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DOM Elements ---
     const bestSellerContainer = document.querySelector('#best-seller .item-card-container');
     const menuContainer = document.getElementById('menu');
-    const modal = document.getElementById('recommendation-modal');
-    const modalCloseButton = document.querySelector('.close-button');
+
+    // Recommendation Modal Elements
+    const recModal = document.getElementById('recommendation-modal');
+    const recModalCloseButton = recModal.querySelector('.close-button');
     const selectedItemNameSpan = document.getElementById('selected-item-name');
     const recommendationItemsContainer = document.getElementById('recommendation-items');
-    const cartItemsContainer = document.getElementById('cart-items');
-    const cartTotalSpan = document.getElementById('cart-total');
+
+    // Cart Modal Elements
+    const cartModal = document.getElementById('cart-modal');
+    const cartModalCloseButton = cartModal.querySelector('.cart-close-button');
+    const myCartBtn = document.getElementById('my-cart-btn');
+    const cartCountSpan = document.getElementById('cart-count');
+    const cartItemsContainer = document.getElementById('cart-items-modal');
+    const cartTotalSpan = document.getElementById('cart-total-modal');
 
     // --- State ---
     let cart = [];
 
-    // --- Functions ---
+    // --- RENDER FUNCTIONS ---
 
-    // Function to render the cart
     function renderCart() {
         cartItemsContainer.innerHTML = '';
         let total = 0;
+        let totalItems = 0;
+
         cart.forEach(cartItem => {
             const itemElement = document.createElement('div');
-            itemElement.textContent = `${cartItem.name} x ${cartItem.quantity} - $${(cartItem.price * cartItem.quantity).toFixed(2)}`;
+            itemElement.classList.add('cart-item');
+            itemElement.innerHTML = `
+                <span>${cartItem.name} x ${cartItem.quantity}</span>
+                <span>$${(cartItem.price * cartItem.quantity).toFixed(2)}</span>
+                <button class="remove-from-cart-btn" data-item-id="${cartItem.id}">Remove</button>
+            `;
             cartItemsContainer.appendChild(itemElement);
             total += cartItem.price * cartItem.quantity;
+            totalItems += cartItem.quantity;
         });
+
         cartTotalSpan.textContent = total.toFixed(2);
+        cartCountSpan.textContent = totalItems;
     }
 
-    // Function to add an item to the cart
+    function createItemCard(item) {
+        const card = document.createElement('div');
+        card.classList.add('item-card');
+        card.dataset.itemId = item.id;
+        card.dataset.testid = `item-card-${item.id}`; // Add test ID
+
+        card.innerHTML = `
+            <div class="item-card-image-container" style="cursor: pointer;">
+                <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
+            </div>
+            <h4>${item.name}</h4>
+            <p>$${item.price.toFixed(2)}</p>
+            <p>${item.description}</p>
+            <button class="add-to-cart-btn" data-testid="add-to-cart-btn-${item.id}">Add to Cart</button>
+        `;
+
+        card.querySelector('.add-to-cart-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            addToCart(item);
+        });
+
+        card.querySelector('.item-card-image-container').addEventListener('click', () => openRecModal(item));
+
+        return card;
+    }
+
+    // --- CART LOGIC ---
+
     function addToCart(item) {
         const existingItem = cart.find(cartItem => cartItem.id === item.id);
         if (existingItem) {
@@ -38,43 +82,67 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCart();
     }
 
-    // Function to create an item card
-    function createItemCard(item) {
-        const card = document.createElement('div');
-        card.classList.add('item-card');
-        card.dataset.itemId = item.id;
-
-        card.innerHTML = `
-            <div class="item-card-image-container">
-                <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
-            </div>
-            <h4>${item.name}</h4>
-            <p>$${item.price.toFixed(2)}</p>
-            <p>${item.description}</p>
-            <button class="add-to-cart-btn">Add to Cart</button>
-        `;
-
-        // Add to cart button event listener
-        const addToCartBtn = card.querySelector('.add-to-cart-btn');
-        addToCartBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent modal from opening when button is clicked
-            addToCart(item);
-        });
-
-        // Card click event listener for recommendations
-        const imageContainer = card.querySelector('.item-card-image-container');
-        imageContainer.addEventListener('click', () => openModal(item));
-
-        return card;
+    function removeFromCart(itemId) {
+        const itemIndex = cart.findIndex(cartItem => cartItem.id === itemId);
+        if (itemIndex > -1) {
+            const item = cart[itemIndex];
+            if (item.quantity > 1) {
+                item.quantity--;
+            } else {
+                cart.splice(itemIndex, 1);
+            }
+        }
+        renderCart();
     }
 
-    // Render Best Seller
+    // --- RECOMMENDATION MODAL LOGIC ---
+
+    function openRecModal(item) {
+        selectedItemNameSpan.textContent = item.name;
+        recommendationItemsContainer.innerHTML = '';
+
+        const recommendedIds = recommendations[item.id] || [];
+        if (recommendedIds.length > 0) {
+            const allItems = [].concat(...Object.values(menu));
+            const recommendedItems = allItems.filter(i => recommendedIds.includes(i.id));
+
+            recommendedItems.forEach(recItem => {
+                const recCard = createItemCard(recItem);
+                recCard.querySelector('.item-card-image-container').removeEventListener('click', () => openRecModal(recItem));
+                recommendationItemsContainer.appendChild(recCard);
+            });
+        } else {
+            recommendationItemsContainer.innerHTML = '<p>No recommendations for this item.</p>';
+        }
+
+        recModal.style.display = 'block';
+    }
+
+    // --- EVENT LISTENERS ---
+
+    cartItemsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-from-cart-btn')) {
+            const itemId = parseInt(e.target.dataset.itemId);
+            removeFromCart(itemId);
+        }
+    });
+
+    myCartBtn.addEventListener('click', () => cartModal.style.display = 'block');
+    cartModalCloseButton.addEventListener('click', () => cartModal.style.display = 'none');
+    recModalCloseButton.addEventListener('click', () => recModal.style.display = 'none');
+
+    window.addEventListener('click', (e) => {
+        if (e.target === recModal) recModal.style.display = 'none';
+        if (e.target === cartModal) cartModal.style.display = 'none';
+    });
+
+    // --- INITIALIZATION ---
+
     if (bestSeller) {
         const bestSellerCard = createItemCard(bestSeller);
         bestSellerContainer.appendChild(bestSellerCard);
     }
 
-    // Render Menu
     for (const category in menu) {
         const categoryTitle = document.createElement('h3');
         categoryTitle.textContent = category.charAt(0).toUpperCase() + category.slice(1).replace('_', ' ');
@@ -91,40 +159,5 @@ document.addEventListener('DOMContentLoaded', () => {
         menuContainer.appendChild(itemContainer);
     }
 
-    // Open Modal with recommendations
-    function openModal(item) {
-        selectedItemNameSpan.textContent = item.name;
-        recommendationItemsContainer.innerHTML = '';
-
-        const recommendedIds = recommendations[item.id] || [];
-        if (recommendedIds.length > 0) {
-            const allItems = [].concat(...Object.values(menu));
-            const recommendedItems = allItems.filter(i => recommendedIds.includes(i.id));
-
-            recommendedItems.forEach(recItem => {
-                const recCard = createItemCard(recItem);
-                // Avoid infinite loop by not opening modal from modal
-                recCard.querySelector('.item-card-image-container').removeEventListener('click', () => openModal(recItem));
-                recommendationItemsContainer.appendChild(recCard);
-            });
-        } else {
-            recommendationItemsContainer.innerHTML = '<p>No recommendations for this item.</p>';
-        }
-
-        modal.style.display = 'block';
-    }
-
-    // Close Modal
-    modalCloseButton.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-
-    // Initial Render
     renderCart();
 });
