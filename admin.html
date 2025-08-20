@@ -12,6 +12,23 @@
     </header>
 
     <main>
+        <section id="order-now">
+            <h2>Place a New Order</h2>
+            <form id="new-order-form">
+                <div class="input-group">
+                    <label for="customer-name">Customer Name</label>
+                    <input type="text" id="customer-name" name="customer-name" required>
+                </div>
+                <fieldset>
+                    <legend>Menu Items</legend>
+                    <div id="menu-items-container">
+                        <!-- Menu items will be injected here by JS -->
+                    </div>
+                </fieldset>
+                <button type="submit">Place Order</button>
+            </form>
+        </section>
+
         <section id="orders">
             <h2>Current Orders</h2>
             <table id="orders-table">
