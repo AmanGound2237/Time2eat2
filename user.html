@@ -12,6 +12,7 @@
         <nav>
             <a href="#menu">Menu</a>
             <a href="#contact">Contact</a>
+            <button id="my-cart-btn">My Cart (<span id="cart-count">0</span>)</button>
         </nav>
     </header>
 
@@ -39,13 +40,17 @@
         </div>
     </div>
 
-    <section id="cart">
-        <h2>Your Cart</h2>
-        <div id="cart-items">
-            <!-- Cart items will be injected here by JS -->
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button cart-close-button">&times;</span>
+            <h2>Your Cart</h2>
+            <div id="cart-items-modal">
+                <!-- Cart items will be injected here by JS -->
+            </div>
+            <p>Total: $<span id="cart-total-modal">0.00</span></p>
         </div>
-        <p>Total: $<span id="cart-total">0.00</span></p>
-    </section>
+    </div>
 
     <script src="js/data.js"></script>
     <script src="js/user.js"></script>
