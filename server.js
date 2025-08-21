@@ -10,7 +10,7 @@ const DB_PATH = path.join(__dirname, 'db.json');
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '/'))); // Serve static files from root
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from public
 
 // Helper functions
 const readDB = () => JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
